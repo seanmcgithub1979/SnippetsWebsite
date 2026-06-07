@@ -1,0 +1,54 @@
+@page "{id}"
+@model SnippetsWebsite.Pages.Snippets.DetailModel
+@{
+    ViewData["Title"] = Model.Snippet!.Title;
+}
+
+<div style="margin-bottom:0.75rem;">
+    <a href="/" style="color:#8b949e;font-size:0.875rem;">← Back to snippets</a>
+</div>
+
+<div class="page-header">
+    <h1>@Model.Snippet.Title</h1>
+</div>
+
+<div class="detail-meta">
+    <div>
+        <div class="label">Language</div>
+        <div class="value"><span class="lang-badge">@Model.Snippet.Language</span></div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Snippet.Description))
+    {
+        <div>
+            <div class="label">Description</div>
+            <div class="value">@Model.Snippet.Description</div>
+        </div>
+    }
+    @if (Model.Snippet.Tags.Count > 0)
+    {
+        <div>
+            <div class="label">Tags</div>
+            <div class="value" style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+                @foreach (var tag in Model.Snippet.Tags)
+                {
+                    <span class="tag">@tag</span>
+                }
+            </div>
+        </div>
+    }
+    <div style="margin-left:auto;text-align:right;">
+        <div class="label">Added</div>
+        <div class="value" style="font-size:0.8rem;color:#8b949e;">@Model.Snippet.CreatedAt.ToString("MMM d, yyyy")</div>
+    </div>
+</div>
+
+<pre><code class="language-@Model.Snippet.Language.ToLower()">@Model.Snippet.Code</code></pre>
+
+<div class="actions">
+    <a href="/Snippets/Edit/@Model.Snippet.Id" class="btn btn-secondary">Edit</a>
+    <form method="post" asp-page-handler="Delete" style="display:inline;"
+          onsubmit="return confirm('Delete this snippet?')">
+        <input type="hidden" name="id" value="@Model.Snippet.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>

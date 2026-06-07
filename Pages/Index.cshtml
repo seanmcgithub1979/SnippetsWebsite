@@ -1,0 +1,66 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Browse Snippets";
+}
+
+<div class="page-header">
+    <h1>Snippets</h1>
+    <span style="color:#8b949e;font-size:0.9rem;">@Model.Snippets.Count snippet@(Model.Snippets.Count == 1 ? "" : "s")</span>
+</div>
+
+<form method="get" class="search-bar">
+    <input type="search" name="q" value="@Model.Query" placeholder="Search title, description, code…" />
+    <select name="language">
+        <option value="">All languages</option>
+        @foreach (var lang in Model.Languages)
+        {
+            <option value="@lang" selected="@(Model.Language == lang)">@lang</option>
+        }
+    </select>
+    <select name="tag">
+        <option value="">All tags</option>
+        @foreach (var tag in Model.AllTags)
+        {
+            <option value="@tag" selected="@(Model.Tag == tag)">@tag</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-secondary">Filter</button>
+    @if (!string.IsNullOrEmpty(Model.Query) || !string.IsNullOrEmpty(Model.Language) || !string.IsNullOrEmpty(Model.Tag))
+    {
+        <a href="/" class="btn btn-secondary">Clear</a>
+    }
+</form>
+
+@if (Model.Snippets.Count == 0)
+{
+    <div class="empty-state">
+        <p>No snippets found.</p>
+        <a href="/Snippets/Add" class="btn btn-primary">Add your first snippet</a>
+    </div>
+}
+else
+{
+    @foreach (var s in Model.Snippets)
+    {
+        <div class="snippet-card">
+            <div>
+                <a href="/Snippets/Detail/@s.Id" style="font-weight:600;color:#e6edf3;">@s.Title</a>
+                @if (!string.IsNullOrEmpty(s.Description))
+                {
+                    <div class="meta">@s.Description</div>
+                }
+                <div class="tags">
+                    @foreach (var tag in s.Tags)
+                    {
+                        <span class="tag">@tag</span>
+                    }
+                </div>
+                <div class="meta" style="margin-top:0.5rem;">Updated @s.UpdatedAt.ToString("MMM d, yyyy")</div>
+            </div>
+            <div style="flex-shrink:0;">
+                <span class="lang-badge">@s.Language</span>
+            </div>
+        </div>
+    }
+}

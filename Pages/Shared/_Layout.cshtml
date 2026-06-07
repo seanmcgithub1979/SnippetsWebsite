@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Snippets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.6;
+        }
+
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        header .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e6edf3;
+            text-decoration: none;
+        }
+
+        header nav a {
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+
+        header nav a:hover { color: #e6edf3; text-decoration: none; }
+
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-primary { background: #238636; border-color: #2ea043; color: #fff; }
+        .btn-primary:hover { background: #2ea043; text-decoration: none; color: #fff; }
+        .btn-secondary { background: #21262d; border-color: #30363d; color: #c9d1d9; }
+        .btn-secondary:hover { background: #30363d; text-decoration: none; color: #e6edf3; }
+        .btn-danger { background: #da3633; border-color: #f85149; color: #fff; }
+        .btn-danger:hover { background: #f85149; text-decoration: none; color: #fff; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.875rem; color: #8b949e; margin-bottom: 0.25rem; }
+
+        input[type=text], input[type=search], select, textarea {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e6edf3;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        textarea { resize: vertical; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.85rem; }
+
+        .tag {
+            display: inline-block;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 0.15rem 0.6rem;
+            font-size: 0.75rem;
+            color: #93c5fd;
+        }
+
+        .snippet-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .snippet-card:hover { border-color: #58a6ff44; }
+        .snippet-card .meta { font-size: 0.78rem; color: #8b949e; margin-top: 0.25rem; }
+        .snippet-card .tags { margin-top: 0.4rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+
+        .lang-badge {
+            background: #1c2d3a;
+            border: 1px solid #1d4ed8;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+            color: #60a5fa;
+            white-space: nowrap;
+        }
+
+        pre { margin: 0; }
+        pre code.hljs { border-radius: 8px; font-size: 0.85rem; }
+
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input[type=search] { flex: 1; min-width: 180px; }
+        .search-bar select { width: auto; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 { margin: 0; font-size: 1.4rem; }
+
+        .detail-meta {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .detail-meta .label { font-size: 0.78rem; color: #8b949e; }
+        .detail-meta .value { font-size: 0.9rem; }
+
+        .actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+
+        .empty-state {
+            text-align: center;
+            color: #8b949e;
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="brand">&#9664;/&#9654; Snippets</a>
+        <nav>
+            <a href="/">Browse</a>
+        </nav>
+        <div style="margin-left:auto;">
+            <a href="/Snippets/Add" class="btn btn-primary">+ New Snippet</a>
+        </div>
+    </header>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

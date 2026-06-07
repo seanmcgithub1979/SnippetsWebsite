@@ -1,0 +1,17 @@
+[
+  {
+    "Id": "ad1c5930b8e2444da3b7f88530516aba",
+    "Title": "Update Repos",
+    "Language": "bash",
+    "Description": "A script to recure from the current directory and update all the git repositories",
+    "Code": "#!/bin/bash\r\n\r\n# Directory to iterate through\r\n# directory=\u0022/SeansStuff/Repos\u0022\r\ndirectory=$(pwd)\r\n\r\necho \u0022$directory\u0022\r\n\r\n# Check if the directory exists\r\nif [ ! -d \u0022$directory\u0022 ]; then\r\n  echo \u0022Directory does not exist!\u0022\r\n  # exit 1\r\nfi\r\n\r\necho \u0022Iterating through the directories\u0022\r\n\r\n# Iterate through the directories\r\nfor repo in \u0022$directory\u0022/*; do\r\n  if [ -d \u0022$repo\u0022 ]; then\r\n    # Check if it\u0027s a Git repository\r\n    if [ -d \u0022$repo/.git\u0022 ]; then\r\n      echo \u0022Updating repository: $repo\u0022\r\n      # Change to the repository directory\r\n      cd \u0022$repo\u0022\r\n      # Perform a git pull to update the repository\r\n      git pull\r\n      echo \u0022Repository updated!\u0022\r\n    else\r\n      echo \u0022Skipping non-Git repository: $repo\u0022\r\n    fi\r\n  fi\r\ndone\r\n\r\necho \u0022Completed.\u0022\r\n",
+    "Tags": [
+      "bash",
+      "shell",
+      "script",
+      "scrips"
+    ],
+    "CreatedAt": "2026-06-07T14:12:14.580371Z",
+    "UpdatedAt": "2026-06-07T14:12:14.580371Z"
+  }
+]
