@@ -102,7 +102,6 @@
             border: 1px solid #30363d;
             border-radius: 8px;
             padding: 1rem 1.25rem;
-            margin-bottom: 0.75rem;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -161,6 +160,16 @@
         .detail-meta .value { font-size: 0.9rem; }
 
         .actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+
+        .snippets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        @@media (max-width: 640px) {
+            .snippets-grid { grid-template-columns: 1fr; }
+        }
 
         .empty-state {
             text-align: center;

@@ -78,28 +78,30 @@
 }
 else
 {
-    @foreach (var s in Model.Snippets)
-    {
-        <div class="snippet-card">
-            <div>
-                <a href="/Snippets/Detail/@s.Id" style="font-weight:600;color:#e6edf3;">@s.Title</a>
-                @if (!string.IsNullOrEmpty(s.Description))
-                {
-                    <div class="meta">@s.Description</div>
-                }
-                <div class="tags">
-                    @foreach (var tag in s.Tags)
+    <div class="snippets-grid">
+        @foreach (var s in Model.Snippets)
+        {
+            <div class="snippet-card">
+                <div>
+                    <a href="/Snippets/Detail/@s.Id" style="font-weight:600;color:#e6edf3;">@s.Title</a>
+                    @if (!string.IsNullOrEmpty(s.Description))
                     {
-                        <span class="tag">@tag</span>
+                        <div class="meta">@s.Description</div>
                     }
+                    <div class="tags">
+                        @foreach (var tag in s.Tags)
+                        {
+                            <span class="tag">@tag</span>
+                        }
+                    </div>
+                    <div class="meta" style="margin-top:0.5rem;">Updated @s.UpdatedAt.ToString("MMM d, yyyy")</div>
                 </div>
-                <div class="meta" style="margin-top:0.5rem;">Updated @s.UpdatedAt.ToString("MMM d, yyyy")</div>
+                <div style="flex-shrink:0;">
+                    <span class="lang-badge">@s.Language</span>
+                </div>
             </div>
-            <div style="flex-shrink:0;">
-                <span class="lang-badge">@s.Language</span>
-            </div>
-        </div>
-    }
+        }
+    </div>
 }
 
 @section Scripts {
