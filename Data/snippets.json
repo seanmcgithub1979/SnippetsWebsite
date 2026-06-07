@@ -4,7 +4,7 @@
     "Title": "Update Repos",
     "Language": "bash",
     "Description": "A script to recure from the current directory and update all the git repositories",
-    "Code": "#!/bin/bash\r\n\r\n# Directory to iterate through\r\n# directory=\u0022/SeansStuff/Repos\u0022\r\ndirectory=$(pwd)\r\n\r\necho \u0022$directory\u0022\r\n\r\n# Check if the directory exists\r\nif [ ! -d \u0022$directory\u0022 ]; then\r\n  echo \u0022Directory does not exist!\u0022\r\n  # exit 1\r\nfi\r\n\r\necho \u0022Iterating through the directories\u0022\r\n\r\n# Iterate through the directories\r\nfor repo in \u0022$directory\u0022/*; do\r\n  if [ -d \u0022$repo\u0022 ]; then\r\n    # Check if it\u0027s a Git repository\r\n    if [ -d \u0022$repo/.git\u0022 ]; then\r\n      echo \u0022Updating repository: $repo\u0022\r\n      # Change to the repository directory\r\n      cd \u0022$repo\u0022\r\n      # Perform a git pull to update the repository\r\n      git pull\r\n      echo \u0022Repository updated!\u0022\r\n    else\r\n      echo \u0022Skipping non-Git repository: $repo\u0022\r\n    fi\r\n  fi\r\ndone\r\n\r\necho \u0022Completed.\u0022\r\n",
+    "Code": "#!/bin/bash\r\n\r\n# Directory to iterate through\r\n# directory=\"/SeansStuff/Repos\"\r\ndirectory=$(pwd)\r\n\r\necho \"$directory\"\r\n\r\n# Check if the directory exists\r\nif [ ! -d \"$directory\" ]; then\r\n  echo \"Directory does not exist!\"\r\n  # exit 1\r\nfi\r\n\r\necho \"Iterating through the directories\"\r\n\r\n# Iterate through the directories\r\nfor repo in \"$directory\"/*; do\r\n  if [ -d \"$repo\" ]; then\r\n    # Check if it's a Git repository\r\n    if [ -d \"$repo/.git\" ]; then\r\n      echo \"Updating repository: $repo\"\r\n      # Change to the repository directory\r\n      cd \"$repo\"\r\n      # Perform a git pull to update the repository\r\n      git pull\r\n      echo \"Repository updated!\"\r\n    else\r\n      echo \"Skipping non-Git repository: $repo\"\r\n    fi\r\n  fi\r\ndone\r\n\r\necho \"Completed.\"\r\n",
     "Tags": [
       "bash",
       "shell",
@@ -13,5 +13,76 @@
     ],
     "CreatedAt": "2026-06-07T14:12:14.580371Z",
     "UpdatedAt": "2026-06-07T14:12:14.580371Z"
+  },
+  {
+    "Id": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+    "Title": "Increase ThreadPool Min Threads",
+    "Language": "csharp",
+    "Description": "Prevent thread pool starvation under burst I/O load by raising the minimum worker and IOCP thread count",
+    "Code": "// Program.cs — add before builder.Build()\n\n// Raise minimum worker/IOCP threads to prevent starvation during\n// traffic bursts. The default scales with CPU count, which is often\n// too low for I/O-heavy workloads.\nThreadPool.SetMinThreads(256, 256);",
+    "Tags": [
+      "performance",
+      "threading",
+      "aspnetcore"
+    ],
+    "CreatedAt": "2026-06-07T15:00:00.000000Z",
+    "UpdatedAt": "2026-06-07T15:00:00.000000Z"
+  },
+  {
+    "Id": "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e",
+    "Title": "Enable Response Compression (Brotli + Gzip)",
+    "Language": "csharp",
+    "Description": "Compress HTTP responses with Brotli and Gzip to reduce payload size and improve perceived load times",
+    "Code": "using Microsoft.AspNetCore.ResponseCompression;\nusing System.IO.Compression;\n\n// Program.cs — register services\nbuilder.Services.AddResponseCompression(options =>\n{\n    options.EnableForHttps = true;\n    options.Providers.Add<BrotliCompressionProvider>();\n    options.Providers.Add<GzipCompressionProvider>();\n});\n\nbuilder.Services.Configure<BrotliCompressionProviderOptions>(o =>\n    o.Level = CompressionLevel.Fastest);\n\nbuilder.Services.Configure<GzipCompressionProviderOptions>(o =>\n    o.Level = CompressionLevel.Fastest);\n\n// Add early in the middleware pipeline, before UseRouting\napp.UseResponseCompression();",
+    "Tags": [
+      "performance",
+      "middleware",
+      "aspnetcore",
+      "compression"
+    ],
+    "CreatedAt": "2026-06-07T15:00:00.000000Z",
+    "UpdatedAt": "2026-06-07T15:00:00.000000Z"
+  },
+  {
+    "Id": "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
+    "Title": "Output Cache Middleware",
+    "Language": "csharp",
+    "Description": "Cache full endpoint responses server-side using the built-in OutputCache middleware (.NET 7+)",
+    "Code": "// Program.cs (.NET 7+)\nbuilder.Services.AddOutputCache(options =>\n{\n    // Default policy: cache all GET/HEAD responses for 60 seconds\n    options.AddBasePolicy(b => b.Expire(TimeSpan.FromSeconds(60)));\n\n    // Named policy for longer-lived data\n    options.AddPolicy(\"Long\", b => b.Expire(TimeSpan.FromMinutes(10)));\n});\n\n// Add after UseRouting, before MapRazorPages / MapControllers\napp.UseOutputCache();\n\n// Minimal API — apply named policy to an endpoint:\n// app.MapGet(\"/products\", GetProducts).CacheOutput(\"Long\");\n\n// MVC / Razor Pages action attribute:\n// [OutputCache(Duration = 60)]",
+    "Tags": [
+      "performance",
+      "caching",
+      "aspnetcore"
+    ],
+    "CreatedAt": "2026-06-07T15:00:00.000000Z",
+    "UpdatedAt": "2026-06-07T15:00:00.000000Z"
+  },
+  {
+    "Id": "4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a",
+    "Title": "Tune Kestrel Connection Limits",
+    "Language": "csharp",
+    "Description": "Configure Kestrel connection and timeout limits for high-throughput production workloads",
+    "Code": "// Program.cs\nbuilder.WebHost.ConfigureKestrel(options =>\n{\n    // Cap total concurrent TCP connections (default: unlimited)\n    options.Limits.MaxConcurrentConnections = 1000;\n    options.Limits.MaxConcurrentUpgradedConnections = 1000;\n\n    // Keep-alive idle timeout (Kestrel default: 130 s)\n    options.Limits.KeepAliveTimeout = TimeSpan.FromSeconds(120);\n\n    // Time allowed for client to send request headers (default: 30 s)\n    options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(15);\n});",
+    "Tags": [
+      "performance",
+      "kestrel",
+      "aspnetcore"
+    ],
+    "CreatedAt": "2026-06-07T15:00:00.000000Z",
+    "UpdatedAt": "2026-06-07T15:00:00.000000Z"
+  },
+  {
+    "Id": "5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b",
+    "Title": "HttpClient Connection Pooling via SocketsHttpHandler",
+    "Language": "csharp",
+    "Description": "Tune SocketsHttpHandler to reuse outbound connections efficiently, preventing socket exhaustion and stale DNS entries",
+    "Code": "// Prevents socket exhaustion and respects DNS TTL changes.\n// Register in Program.cs:\n\nbuilder.Services.AddHttpClient(\"api\", client =>\n{\n    client.BaseAddress = new Uri(\"https://api.example.com\");\n    client.Timeout = TimeSpan.FromSeconds(30);\n})\n.ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler\n{\n    // Recycle connections after 2 minutes to pick up DNS changes\n    PooledConnectionLifetime = TimeSpan.FromMinutes(2),\n    PooledConnectionIdleTimeout = TimeSpan.FromSeconds(90),\n    MaxConnectionsPerServer = 20,\n    EnableMultipleHttp2Connections = true\n});\n\n// Inject and resolve in a service:\n// public MyService(IHttpClientFactory factory) =>\n//     _client = factory.CreateClient(\"api\");",
+    "Tags": [
+      "performance",
+      "httpclient",
+      "aspnetcore"
+    ],
+    "CreatedAt": "2026-06-07T15:00:00.000000Z",
+    "UpdatedAt": "2026-06-07T15:00:00.000000Z"
   }
 ]
