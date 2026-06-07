@@ -68,25 +68,22 @@ public class JsonSnippetRepository : ISnippetRepository
         finally { _lock.Release(); }
     }
 
-    public async Task<List<Snippet>> SearchAsync(string? query, string? language, string? tag)
+    public async Task<List<Snippet>> SearchAsync(string? query, IReadOnlyList<string>? languages, IReadOnlyList<string>? tags)
     {
         var all = await ReadAsync();
 
-        if (!string.IsNullOrWhiteSpace(language))
-            all = all.Where(s => s.Language.Equals(language, StringComparison.OrdinalIgnoreCase)).ToList();
+        if (languages?.Count > 0)
+            all = all.Where(s => languages.Any(l => s.Language.Equals(l, StringComparison.OrdinalIgnoreCase))).ToList();
 
-        if (!string.IsNullOrWhiteSpace(tag))
-            all = all.Where(s => s.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase))).ToList();
+        if (tags?.Count > 0)
+            all = all.Where(s => tags.Any(t => s.Tags.Any(st => st.Equals(t, StringComparison.OrdinalIgnoreCase)))).ToList();
 
         if (!string.IsNullOrWhiteSpace(query))
-        {
-            var q = query.ToLower();
             all = all.Where(s =>
-                s.Title.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                s.Description.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                s.Code.Contains(q, StringComparison.OrdinalIgnoreCase)
+                s.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                s.Description.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                s.Code.Contains(query, StringComparison.OrdinalIgnoreCase)
             ).ToList();
-        }
 
         return all.OrderByDescending(s => s.UpdatedAt).ToList();
     }

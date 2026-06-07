@@ -2,6 +2,7 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Browse Snippets";
+    var hasFilters = !string.IsNullOrEmpty(Model.Query) || Model.SelectedLanguages.Count > 0 || Model.SelectedTags.Count > 0;
 }
 
 <div class="page-header">
@@ -11,26 +12,62 @@
 
 <form method="get" class="search-bar">
     <input type="search" name="q" value="@Model.Query" placeholder="Search title, description, code…" />
-    <select name="language">
-        <option value="">All languages</option>
-        @foreach (var lang in Model.Languages)
-        {
-            <option value="@lang" selected="@(Model.Language == lang)">@lang</option>
-        }
-    </select>
-    <select name="tag">
-        <option value="">All tags</option>
-        @foreach (var tag in Model.AllTags)
-        {
-            <option value="@tag" selected="@(Model.Tag == tag)">@tag</option>
-        }
-    </select>
-    <button type="submit" class="btn btn-secondary">Filter</button>
-    @if (!string.IsNullOrEmpty(Model.Query) || !string.IsNullOrEmpty(Model.Language) || !string.IsNullOrEmpty(Model.Tag))
+
+    <details class="filter-picker" id="langPicker">
+        <summary>@(Model.SelectedLanguages.Count > 0 ? $"Language ({Model.SelectedLanguages.Count})" : "Language")</summary>
+        <div class="filter-picker-menu">
+            @foreach (var lang in Model.Languages)
+            {
+                <label>
+                    <input type="checkbox" name="language" value="@lang"
+                           checked="@(Model.SelectedLanguages.Any(l => l.Equals(lang, StringComparison.OrdinalIgnoreCase)) ? "checked" : null)"
+                           onchange="this.form.submit()" />
+                    @lang
+                </label>
+            }
+        </div>
+    </details>
+
+    <details class="filter-picker" id="tagPicker">
+        <summary>@(Model.SelectedTags.Count > 0 ? $"Tags ({Model.SelectedTags.Count})" : "Tags")</summary>
+        <div class="filter-picker-menu">
+            @foreach (var tag in Model.AllTags)
+            {
+                <label>
+                    <input type="checkbox" name="tag" value="@tag"
+                           checked="@(Model.SelectedTags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) ? "checked" : null)"
+                           onchange="this.form.submit()" />
+                    @tag
+                </label>
+            }
+        </div>
+    </details>
+
+    <button type="submit" class="btn btn-secondary">Search</button>
+    @if (hasFilters)
     {
         <a href="/" class="btn btn-secondary">Clear</a>
     }
 </form>
+
+@if (hasFilters)
+{
+    <div class="active-filters">
+        <span class="active-filters-label">Active filters:</span>
+        @if (!string.IsNullOrEmpty(Model.Query))
+        {
+            <span class="active-filter-chip">search: "@Model.Query"</span>
+        }
+        @if (Model.SelectedLanguages.Count > 0)
+        {
+            <span class="active-filter-chip">language: @string.Join(", ", Model.SelectedLanguages)</span>
+        }
+        @if (Model.SelectedTags.Count > 0)
+        {
+            <span class="active-filter-chip">tags: @string.Join(", ", Model.SelectedTags)</span>
+        }
+    </div>
+}
 
 @if (Model.Snippets.Count == 0)
 {
@@ -63,4 +100,13 @@ else
             </div>
         </div>
     }
+}
+
+@section Scripts {
+    <script>
+        // Re-open picker dropdowns that have active selections after a page reload
+        const params = new URLSearchParams(location.search);
+        if (params.has('language')) document.getElementById('langPicker').open = true;
+        if (params.has('tag')) document.getElementById('tagPicker').open = true;
+    </script>
 }

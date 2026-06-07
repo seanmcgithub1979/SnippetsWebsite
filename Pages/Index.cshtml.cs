@@ -15,14 +15,16 @@ public class IndexModel : PageModel
     public List<string> AllTags { get; set; } = [];
 
     public string? Query => Request.Query["q"];
-    public string? Language => Request.Query["language"];
-    public string? Tag => Request.Query["tag"];
+    public IReadOnlyList<string> SelectedLanguages =>
+        Request.Query["language"].Where(v => !string.IsNullOrEmpty(v)).ToList()!;
+    public IReadOnlyList<string> SelectedTags =>
+        Request.Query["tag"].Where(v => !string.IsNullOrEmpty(v)).ToList()!;
 
     public async Task OnGetAsync()
     {
         var all = await _repo.GetAllAsync();
         Languages = all.Select(s => s.Language).Where(l => !string.IsNullOrEmpty(l)).Distinct().OrderBy(l => l).ToList();
         AllTags = all.SelectMany(s => s.Tags).Distinct().OrderBy(t => t).ToList();
-        Snippets = await _repo.SearchAsync(Query, Language, Tag);
+        Snippets = await _repo.SearchAsync(Query, SelectedLanguages, SelectedTags);
     }
 }

@@ -9,5 +9,5 @@ public interface ISnippetRepository
     Task AddAsync(Snippet snippet);
     Task UpdateAsync(Snippet snippet);
     Task DeleteAsync(string id);
-    Task<List<Snippet>> SearchAsync(string? query, string? language, string? tag);
+    Task<List<Snippet>> SearchAsync(string? query, IReadOnlyList<string>? languages, IReadOnlyList<string>? tags);
 }

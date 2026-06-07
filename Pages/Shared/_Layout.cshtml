@@ -167,6 +167,79 @@
             color: #8b949e;
             padding: 3rem 0;
         }
+
+        /* filter picker dropdown */
+        .filter-picker { position: relative; display: inline-block; }
+
+        .filter-picker summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.875rem;
+            color: #c9d1d9;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .filter-picker summary::-webkit-details-marker { display: none; }
+        .filter-picker summary::after { content: " ▾"; font-size: 0.7rem; opacity: 0.7; }
+        .filter-picker[open] > summary { border-color: #58a6ff; color: #e6edf3; }
+
+        .filter-picker-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 0.4rem;
+            z-index: 100;
+            min-width: 160px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        .filter-picker-menu label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #c9d1d9;
+            cursor: pointer;
+        }
+
+        .filter-picker-menu label:hover { background: #21262d; color: #e6edf3; }
+        .filter-picker-menu input[type=checkbox] { accent-color: #58a6ff; cursor: pointer; }
+
+        /* active filter line */
+        .active-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.82rem;
+        }
+
+        .active-filters-label { color: #8b949e; }
+
+        .active-filter-chip {
+            color: #f0c040;
+            background: #1e1a00;
+            border: 1px solid #f0c04033;
+            border-radius: 4px;
+            padding: 0.1rem 0.55rem;
+        }
     </style>
 </head>
 <body>
